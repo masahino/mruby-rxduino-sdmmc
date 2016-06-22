@@ -96,6 +96,9 @@ mrb_value mrb_sdmmc_open(mrb_state *mrb, mrb_value self)
 	  mode = FILE_READ;
      }
      *file = MMC.open(mrb_string_value_ptr(mrb, filename), mode);
+     if (*file == false) {
+	  return mrb_false_value();
+     }
      DATA_PTR(file_obj) = file;  
      DATA_TYPE(file_obj) = &mrb_sdmmcfile_type;  
      return mrb_obj_value(mrb_data_object_alloc(mrb,
@@ -310,35 +313,35 @@ mruby_rxduino_sdmmc_init(mrb_state* mrb)
 RClass *sdmmcClass, *sdmmcfileClass;
 sdmmcClass = mrb_define_class(mrb, "SDMMC", mrb->object_class);
 MRB_SET_INSTANCE_TT(sdmmcClass, MRB_TT_DATA);
-  mrb_define_class_method(mrb, sdmmcClass, "get_version", mrb_sdmmc_get_version, ARGS_NONE());
+  mrb_define_class_method(mrb, sdmmcClass, "get_version", mrb_sdmmc_get_version, MRB_ARGS_NONE());
 //  mrb_define_method(mrb, sdmmcClass, "initialize", mrb_sdmmc_initialize, ARGS_NONE());
-  mrb_define_class_method(mrb, sdmmcClass, "begin", mrb_sdmmc_begin, ARGS_OPT(1));
-  mrb_define_class_method(mrb, sdmmcClass, "insert", mrb_sdmmc_insert, ARGS_REQ(1));
-  mrb_define_class_method(mrb, sdmmcClass, "exists", mrb_sdmmc_exists, ARGS_REQ(1));
-  mrb_define_class_method(mrb, sdmmcClass, "mkdir", mrb_sdmmc_mkdir, ARGS_REQ(1));
-  mrb_define_class_method(mrb, sdmmcClass, "open", mrb_sdmmc_open, ARGS_REQ(1));
-  mrb_define_class_method(mrb, sdmmcClass, "remove", mrb_sdmmc_remove, ARGS_REQ(1));
-  mrb_define_class_method(mrb, sdmmcClass, "rename", mrb_sdmmc_rename, ARGS_REQ(1));
-  mrb_define_class_method(mrb, sdmmcClass, "rmdir", mrb_sdmmc_rename, ARGS_REQ(1));
+  mrb_define_class_method(mrb, sdmmcClass, "begin", mrb_sdmmc_begin, MRB_ARGS_OPT(1));
+  mrb_define_class_method(mrb, sdmmcClass, "insert", mrb_sdmmc_insert, MRB_ARGS_REQ(1));
+  mrb_define_class_method(mrb, sdmmcClass, "exists", mrb_sdmmc_exists, MRB_ARGS_REQ(1));
+  mrb_define_class_method(mrb, sdmmcClass, "mkdir", mrb_sdmmc_mkdir, MRB_ARGS_REQ(1));
+  mrb_define_class_method(mrb, sdmmcClass, "open", mrb_sdmmc_open, MRB_ARGS_REQ(1));
+  mrb_define_class_method(mrb, sdmmcClass, "remove", mrb_sdmmc_remove, MRB_ARGS_REQ(1));
+  mrb_define_class_method(mrb, sdmmcClass, "rename", mrb_sdmmc_rename, MRB_ARGS_REQ(1));
+  mrb_define_class_method(mrb, sdmmcClass, "rmdir", mrb_sdmmc_rename, MRB_ARGS_REQ(1));
 
 sdmmcfileClass = mrb_define_class(mrb,  "SDMMCFile", mrb->object_class);
 MRB_SET_INSTANCE_TT(sdmmcClass, MRB_TT_DATA);
 
-  mrb_define_method(mrb, sdmmcfileClass, "close", mrb_sdmmcfile_close, ARGS_NONE());
-  mrb_define_method(mrb, sdmmcfileClass, "available", mrb_sdmmcfile_available, ARGS_NONE());
-  mrb_define_method(mrb, sdmmcfileClass, "read", mrb_sdmmcfile_read, ARGS_NONE());
-  mrb_define_method(mrb, sdmmcfileClass, "write", mrb_sdmmcfile_write, ARGS_REQ(1) | ARGS_OPT(1));
-  mrb_define_method(mrb, sdmmcfileClass, "flush", mrb_sdmmcfile_flush, ARGS_NONE());
-  mrb_define_method(mrb, sdmmcfileClass, "peek", mrb_sdmmcfile_peek, ARGS_NONE());
-  mrb_define_method(mrb, sdmmcfileClass, "position", mrb_sdmmcfile_position, ARGS_NONE());
-  mrb_define_method(mrb, sdmmcfileClass, "seek", mrb_sdmmcfile_seek, ARGS_REQ(1));
-  mrb_define_method(mrb, sdmmcfileClass, "print", mrb_sdmmcfile_print, ARGS_REQ(1) | ARGS_OPT(1));
-  mrb_define_method(mrb, sdmmcfileClass, "println", mrb_sdmmcfile_println, ARGS_REQ(1) | ARGS_OPT(1));
-  mrb_define_method(mrb, sdmmcfileClass, "size", mrb_sdmmcfile_size, ARGS_NONE());
-  mrb_define_method(mrb, sdmmcfileClass, "name", mrb_sdmmcfile_name, ARGS_NONE());
-  mrb_define_method(mrb, sdmmcfileClass, "is_directory", mrb_sdmmcfile_is_directory, ARGS_NONE());
-  mrb_define_method(mrb, sdmmcfileClass, "open_next_file", mrb_sdmmcfile_open_next_file, ARGS_NONE());
-  mrb_define_method(mrb, sdmmcfileClass, "rewind_directory", mrb_sdmmcfile_rewind_directory, ARGS_NONE());
+  mrb_define_method(mrb, sdmmcfileClass, "close", mrb_sdmmcfile_close, MRB_ARGS_NONE());
+  mrb_define_method(mrb, sdmmcfileClass, "available", mrb_sdmmcfile_available, MRB_ARGS_NONE());
+  mrb_define_method(mrb, sdmmcfileClass, "read", mrb_sdmmcfile_read, MRB_ARGS_NONE());
+  mrb_define_method(mrb, sdmmcfileClass, "write", mrb_sdmmcfile_write, MRB_ARGS_REQ(1) | MRB_ARGS_OPT(1));
+  mrb_define_method(mrb, sdmmcfileClass, "flush", mrb_sdmmcfile_flush, MRB_ARGS_NONE());
+  mrb_define_method(mrb, sdmmcfileClass, "peek", mrb_sdmmcfile_peek, MRB_ARGS_NONE());
+  mrb_define_method(mrb, sdmmcfileClass, "position", mrb_sdmmcfile_position, MRB_ARGS_NONE());
+  mrb_define_method(mrb, sdmmcfileClass, "seek", mrb_sdmmcfile_seek, MRB_ARGS_REQ(1));
+  mrb_define_method(mrb, sdmmcfileClass, "print", mrb_sdmmcfile_print, MRB_ARGS_REQ(1) | MRB_ARGS_OPT(1));
+  mrb_define_method(mrb, sdmmcfileClass, "println", mrb_sdmmcfile_println, MRB_ARGS_REQ(1) | MRB_ARGS_OPT(1));
+  mrb_define_method(mrb, sdmmcfileClass, "size", mrb_sdmmcfile_size, MRB_ARGS_NONE());
+  mrb_define_method(mrb, sdmmcfileClass, "name", mrb_sdmmcfile_name, MRB_ARGS_NONE());
+  mrb_define_method(mrb, sdmmcfileClass, "is_directory", mrb_sdmmcfile_is_directory, MRB_ARGS_NONE());
+  mrb_define_method(mrb, sdmmcfileClass, "open_next_file", mrb_sdmmcfile_open_next_file, MRB_ARGS_NONE());
+  mrb_define_method(mrb, sdmmcfileClass, "rewind_directory", mrb_sdmmcfile_rewind_directory, MRB_ARGS_NONE());
   
   mrb_define_const(mrb, sdmmcClass, "FILE_BUFFER_SIZE", mrb_fixnum_value(FILE_BUFFER_SIZE));
   mrb_define_const(mrb, sdmmcClass, "FILENAME_SIZE", mrb_fixnum_value(FILENAME_SIZE));
